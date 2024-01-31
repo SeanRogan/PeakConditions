@@ -1,0 +1,40 @@
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://db:5432/postgres-peak-conditions}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postpass}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    generate-ddl: true
+    open-in-view: true
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+  data:
+    rest:
+      base-path: /
+  sql:
+    init:
+      mode: always
+      separator: ';'
+      continue-on-error: true
+  security:
+    user:
+      name: user
+      password: password
+  application:
+    name: Peak Conditions - Mountain Weather App
+  mvc:
+    log-request-details: true
+  client: ${SPRING_CLIENT:http://localhost:3000}
+server:
+  port: 8080
+#set to DEBUG or TRACE for more details
+logging:
+  level:
+    root: INFO
+

@@ -1,0 +1,34 @@
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    generate-ddl: true
+    open-in-view: true
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+  data:
+    rest:
+      base-path: /
+  sql:
+    init:
+      mode: always
+      separator: ';'
+      continue-on-error: true
+  application:
+    name: Peak Conditions - Mountain Weather App
+  mvc:
+    log-request-details: false
+  client: ${SPRING_CLIENT}}
+server:
+  port: 8080
+logging:
+  level:
+    root: INFO
+

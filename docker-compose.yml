@@ -1,0 +1,43 @@
+version: '3.8'
+services:
+  springboot-app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    #map external:internal ports
+    ports:
+      - "8080:8080"
+    #create environment variables
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres-peak-conditions
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postpass
+      - SPRING_CLIENT=http://localhost:4000
+      - SPRING_ACTIVE_PROFILE=dev
+    #dependency services
+    depends_on:
+      - db
+  db:
+    #use a standard postgres image =
+    image: postgres:latest
+    environment:
+      #set environment variables
+      POSTGRES_DB: postgres-peak-conditions
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postpass
+    ports:
+      - "5432:5432"
+    #declare data storage location
+    volumes:
+      - db-data:/var/lib/postgresql/data
+  nextjs-app:
+    build:
+      context: ./peak-conditions
+      dockerfile: Dockerfile
+    ports:
+      - "4000:3000"
+    environment:
+      NEXT_PUBLIC_SERVER_HOSTNAME: http://localhost:8080
+#create volume for data-storage
+volumes:
+  db-data:

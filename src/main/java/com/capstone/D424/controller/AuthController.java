@@ -7,23 +7,23 @@ import com.capstone.D424.dto.RegistrationResponse;
 import com.capstone.D424.entities.User;
 import com.capstone.D424.service.AuthenticationService;
 import com.capstone.D424.service.JwtService;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 
+/**
+ * Controller class handling HTTP requests related to authentication and registration of users. provides endpoints for
+ * users to register and login to their account and to refresh access token cookies.
+ */
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -34,6 +34,17 @@ public class AuthController {
     private final JwtService jwtService;
     private final AuthenticationService authenticationService;
 
+    /**
+     * Logs in the user to their account with login credentials. returns a ResponseEntity with an AuthenticationResponse for the
+     * body if the request was valid. No response body is returned if request or credentials are not valid.
+     *
+     * @param authRequest the body of the request is a json object which should contain the user's login credentials.
+     * @param response    the servlet response object.
+     * @return a responseEntity is returned with the status code
+     * and the AuthenticationResponse as a response body if the request was valid.
+     * @see AuthenticationResponse
+     * @see AuthenticationRequest
+     */
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest authRequest, HttpServletResponse response) {
         try {
@@ -55,6 +66,17 @@ public class AuthController {
         }
     }
 
+    /**
+     * Registers a new user account with the provided credentials. returns a ResponseEntity with RegistrationResponse for the
+     * body if the request was valid. No response body is returned if request or credentials are not valid.
+     *
+     * @param registerRequest the body of the request is a json object which should contain the registration credentials.
+     * @param response        the servlet response object.
+     * @return a responseEntity is returned with the status code
+     * and the RegistrationResponse as a response body if the request was valid.
+     * @see RegistrationResponse
+     * @see RegisterRequest
+     */
     @PostMapping("/register")
     public ResponseEntity<RegistrationResponse> register(@RequestBody RegisterRequest registerRequest, HttpServletResponse response) {
         try {
@@ -72,6 +94,12 @@ public class AuthController {
         }
     }
 
+    /**
+     * Refreshes the access-token cookie and refresh-token cookie, with a valid refresh-token in the request.
+     *
+     * @param request  The HTTP servlet request object, containing the request's refresh-token.
+     * @param response The HTTP servlet response object with updated cookies.
+     */
     @PostMapping("/refresh")
     public void refresh(HttpServletRequest request, HttpServletResponse response) {
         try {
@@ -81,6 +109,13 @@ public class AuthController {
         }
     }
 
+    /**
+     * Creates access-token and refresh-token cookies to be associated with an HTTP servlet response.
+     *
+     * @param response               the http servlet response to be returned.
+     * @param authenticationResponse the response from the authentication service.
+     * @see AuthenticationResponse
+     */
     private void addCookies(HttpServletResponse response, AuthenticationResponse authenticationResponse) {
         User user = authenticationResponse.getUser();
 
@@ -95,21 +130,7 @@ public class AuthController {
         String refreshCookieStr = "refresh_token=" + refreshToken +
                 "; HttpOnly; Secure; Path=/; Max-Age=604800; SameSite=None";
         response.addHeader("Set-Cookie", refreshCookieStr);
-//
-//        Cookie accessCookie = new Cookie("access_token", jwtService.generateToken(user));
-//        accessCookie.setHttpOnly(true);
-//        accessCookie.setSecure(true); // Set to true in production for HTTPS
-//        accessCookie.setPath("/");
-//        accessCookie.setMaxAge(3600); // Expires in 1 hour
-//        response.addCookie(accessCookie);
-//
-//        Cookie refreshCookie = new Cookie("refresh_token", jwtService.generateRefreshToken(user));
-//        refreshCookie.setHttpOnly(true);
-//        refreshCookie.setSecure(true); // Set to true in production for HTTPS
-//        refreshCookie.setPath("/");
-//        refreshCookie.setMaxAge(604800); // Expires in 1 week
-//
-//        response.addCookie(refreshCookie);
+
     }
 
 }

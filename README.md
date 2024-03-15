@@ -14,11 +14,9 @@ This project was built using Java 17, Spring 3.2, Spring Security 6, PostgreSQL 
 Ensure you have [docker](https://docs.docker.com/get-docker/) installed on your machine.
 Clone the repository to your machine, and type the following command into the terminal to start the docker-compose build process
 `docker-compose up -d`
-This will build and launch the services in dev mode.
-The backend can be accessed at localhost:8080
-The frontend can be accessed at localhost:3000
 
-
+#### The backend can be accessed at localhost:8080. 
+#### The frontend can be accessed at localhost:3000
 
 
 

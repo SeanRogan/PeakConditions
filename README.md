@@ -18,5 +18,5 @@ Clone the repository to your machine, and type the following command into the te
 #### The backend can be accessed at localhost:8080. 
 #### The frontend can be accessed at localhost:3000
 
-## For ERD, UML diagrams, developer guide, and user guides; see design-doc.pdf
+## For ERD, UML diagrams, developer guide, and user guides; see [design-doc.pdf](https://github.com/SeanRogan/PeakConditions/blob/master/design-doc.pdf)
 
